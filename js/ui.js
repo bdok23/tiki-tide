@@ -404,6 +404,7 @@ function drawMenu() {
     dctx.fillRect(0, 0, dw, dh);
     panel(dw * 0.12, dh * 0.1, dw * 0.76, dh * 0.8);
     outlined(m.title, dw / 2, dh * 0.15, '#ffd23f', Math.round(11 * U));
+    outlined(`v${BUILD}`, dw * 0.86, dh * 0.13, '#6a5a8a', Math.round(3.6 * U), 'right');
   }
   if (m.kind === 'controls') {
     const size = Math.round(5.6 * U);
