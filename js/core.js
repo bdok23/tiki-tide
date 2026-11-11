@@ -44,16 +44,14 @@ let U = 3;
 
 function resize() {
   const dpr = window.devicePixelRatio || 1;
-  const vv = window.visualViewport;
-  const s = Math.min((vv ? vv.width : window.innerWidth) / W, (vv ? vv.height : window.innerHeight) / H);
-  display.style.width = `${Math.floor(W * s)}px`;
-  display.style.height = `${Math.floor(H * s)}px`;
-  U = s * dpr;
+  const r = display.getBoundingClientRect();
+  U = ((r.width || window.innerWidth) / W) * dpr;
   display.width = Math.floor(W * U);
   display.height = Math.floor(H * U);
 }
 addEventListener('resize', resize);
 if (window.visualViewport) window.visualViewport.addEventListener('resize', resize);
+addEventListener('orientationchange', () => setTimeout(resize, 300));
 resize();
 
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
