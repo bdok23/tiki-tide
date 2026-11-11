@@ -27,6 +27,7 @@ function initAudio() {
   const d = noiseBuf.getChannelData(0);
   for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
   nextNote = AC.currentTime + 0.1;
+  loadTrack();
 }
 
 function voice(freq, t, dur, type, vol, dest, slideTo) {
@@ -282,14 +283,118 @@ Object.assign(THEMES, {
   },
 });
 
+const TRACK_URL = 'music/smores.m4a';
+const TRACK_LOOP = [1.5, 99.54];
+const TAVERN_RATES = [1.19, 1, 1.335];
+const TRACK_FX = {
+  beach: { rate: 1 },
+  jungle: { rate: 1.06, lp: 9000, wet: 0.08 },
+  spooky: { rate: 0.84, lp: 1500, wet: 0.45, trem: 0.35 },
+  tavern: { rate: 1.19, wet: 0.05 },
+  cave: { rate: 0.75, lp: 800, wet: 0.7 },
+  ruins: { rate: 0.9, lp: 3200, wet: 0.35 },
+  sea: { rate: 1, lp: 5000, wet: 0.15, vib: 0.012 },
+  funk: { rate: 1.12, wah: 1 },
+  ice: { rate: 1.26, hp: 450, echo: 0.35 },
+  cheese: { rate: 1.12, vib: 0.03, trem: 0.2 },
+};
+let track = null;
+
+function loadTrack() {
+  fetch(TRACK_URL)
+    .then(r => (r.ok ? r.arrayBuffer() : Promise.reject(new Error('no track'))))
+    .then(b => new Promise((res, rej) => AC.decodeAudioData(b, res, rej)))
+    .then(startTrack)
+    .catch(() => {});
+}
+
+function startTrack(buffer) {
+  const src = AC.createBufferSource();
+  src.buffer = buffer;
+  src.loop = true;
+  src.loopStart = TRACK_LOOP[0];
+  src.loopEnd = Math.min(TRACK_LOOP[1], buffer.duration);
+  const hp = AC.createBiquadFilter();
+  hp.type = 'highpass';
+  hp.frequency.value = 20;
+  const lp = AC.createBiquadFilter();
+  lp.type = 'lowpass';
+  lp.frequency.value = 20000;
+  const wah = AC.createBiquadFilter();
+  wah.type = 'peaking';
+  wah.Q.value = 4;
+  wah.gain.value = 0;
+  const out = AC.createGain();
+  out.gain.value = 0;
+  const trem = AC.createGain();
+  const conv = AC.createConvolver();
+  const ir = AC.createBuffer(2, AC.sampleRate * 2.6, AC.sampleRate);
+  for (let c = 0; c < 2; c++) {
+    const d = ir.getChannelData(c);
+    for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / d.length, 2.6);
+  }
+  conv.buffer = ir;
+  const wet = AC.createGain();
+  wet.gain.value = 0;
+  const delay = AC.createDelay(1);
+  delay.delayTime.value = 0.34;
+  const fb = AC.createGain();
+  fb.gain.value = 0.4;
+  const echo = AC.createGain();
+  echo.gain.value = 0;
+  src.connect(hp);
+  hp.connect(lp);
+  lp.connect(wah);
+  wah.connect(trem);
+  wah.connect(conv);
+  conv.connect(wet);
+  wet.connect(trem);
+  wah.connect(delay);
+  delay.connect(fb);
+  fb.connect(delay);
+  delay.connect(echo);
+  echo.connect(trem);
+  trem.connect(out);
+  out.connect(master);
+  src.start(0, TRACK_LOOP[0]);
+  track = { src, hp, lp, wah, wet, echo, trem, out, fx: TRACK_FX.beach };
+  applyTrackFx();
+}
+
+function applyTrackFx() {
+  if (!track) return;
+  const fx = TRACK_FX[theme] || TRACK_FX.beach;
+  const t = AC.currentTime;
+  track.fx = fx;
+  track.rate = theme === 'tavern' && typeof S !== 'undefined' ? TAVERN_RATES[S.flags.tune || 0] : fx.rate;
+  track.src.playbackRate.setTargetAtTime(track.rate, t, 0.35);
+  track.lp.frequency.setTargetAtTime(fx.lp || 20000, t, 0.3);
+  track.hp.frequency.setTargetAtTime(fx.hp || 20, t, 0.3);
+  track.wet.gain.setTargetAtTime(fx.wet || 0, t, 0.4);
+  track.echo.gain.setTargetAtTime(fx.echo || 0, t, 0.4);
+  track.wah.gain.setTargetAtTime(fx.wah ? 14 : 0, t, 0.3);
+  if (!fx.trem) track.trem.gain.setTargetAtTime(1, t, 0.2);
+}
+
+function trackTick() {
+  const t = AC.currentTime;
+  const fx = track.fx;
+  track.out.gain.setTargetAtTime(musicOn ? 1.15 : 0, t, 0.15);
+  if (fx.wah) track.wah.frequency.setTargetAtTime(900 + 650 * Math.sin(t * Math.PI * 2 * 1.1), t, 0.03);
+  if (fx.trem) track.trem.gain.setTargetAtTime(1 - fx.trem * (0.5 + 0.5 * Math.sin(t * Math.PI * 2 * 4.4)), t, 0.03);
+  if (fx.vib) track.src.playbackRate.setTargetAtTime(track.rate * (1 + fx.vib * Math.sin(t * Math.PI * 2 * 0.9)), t, 0.05);
+}
+
 function setTheme(name) {
   if (theme === name) return;
   theme = name;
   step = 0;
+  applyTrackFx();
 }
 
 function music() {
   if (!AC) return;
+  if (track) return trackTick();
   if (nextNote < AC.currentTime - 0.5) nextNote = AC.currentTime + 0.05;
   const T = THEMES[theme];
   while (nextNote < AC.currentTime + 0.2) {

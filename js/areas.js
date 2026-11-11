@@ -1056,6 +1056,7 @@ AREAS.tavern = (() => {
           S.flags.tune = ((S.flags.tune || 0) + 1) % TAVERN_TUNES.length;
           THEMES.tavern.mel = TAVERN_TUNES[S.flags.tune];
           step = 0;
+          applyTrackFx();
           sfx.select();
           egg('organ');
           say(['me', pick(['A new tune! The pirates approve. Slightly.', 'Ooh, I like this one.', 'Catchy.'])]);
