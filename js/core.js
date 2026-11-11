@@ -6,7 +6,7 @@ const OUT = '#1a1024';
 const COIN_TOTAL = 18;
 const TOUCH = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 const ACT = TOUCH ? 'A' : 'Enter';
-const PAD_SIZES = [['Small', 0.6], ['Medium', 0.75], ['Large', 1]];
+const PAD_SIZES = [['Small', 0.8], ['Medium', 1], ['Large', 1.25]];
 function padSize() {
   try {
     return clampPad(Number(localStorage.getItem('tikitide.pad') ?? 1));
@@ -25,8 +25,7 @@ function applyPadSize(n) {
       return;
     }
   }
-  const pad = document.getElementById('pad');
-  if (pad) pad.style.setProperty('--s', PAD_SIZES[padSize()][1]);
+  document.body.style.setProperty('--s', PAD_SIZES[padSize()][1]);
 }
 
 const mk = (w, h) => {
@@ -45,7 +44,8 @@ let U = 3;
 
 function resize() {
   const dpr = window.devicePixelRatio || 1;
-  const s = Math.min(window.innerWidth / W, window.innerHeight / H);
+  const vv = window.visualViewport;
+  const s = Math.min((vv ? vv.width : window.innerWidth) / W, (vv ? vv.height : window.innerHeight) / H);
   display.style.width = `${Math.floor(W * s)}px`;
   display.style.height = `${Math.floor(H * s)}px`;
   U = s * dpr;
@@ -53,6 +53,7 @@ function resize() {
   display.height = Math.floor(H * U);
 }
 addEventListener('resize', resize);
+if (window.visualViewport) window.visualViewport.addEventListener('resize', resize);
 resize();
 
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));

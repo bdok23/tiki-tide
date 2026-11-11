@@ -120,7 +120,9 @@ function buildMenu(kind) {
         { label: 'Controls', fn: () => openMenu('controls') },
         { label: `Music: ${musicOn ? 'On' : 'Off'}`, fn: () => { musicOn = !musicOn; openMenu('pause', 7); } },
         { label: 'Quit to Title', fn: toTitle },
-      ].concat(TOUCH ? [{ label: `Button size: ${PAD_SIZES[padSize()][0]}`, fn: () => { applyPadSize((padSize() + 1) % PAD_SIZES.length); openMenu('pause', 9); } }] : []),
+      ]
+        .concat(document.documentElement.requestFullscreen ? [{ label: `Fullscreen: ${document.fullscreenElement ? 'On' : 'Off'}`, fn: toggleFullscreen }] : [])
+        .concat(TOUCH ? [{ label: `Button size: ${PAD_SIZES[padSize()][0]}`, fn: () => { const i = G.menu.i; applyPadSize((padSize() + 1) % PAD_SIZES.length); openMenu('pause', i); } }] : []),
     };
   }
   if (kind === 'warp') {
@@ -179,6 +181,13 @@ function openMenu(kind, i) {
   if (i !== undefined) G.menu.i = i;
   if (G.mode !== 'title') G.mode = 'menu';
 }
+function toggleFullscreen() {
+  const i = G.menu.i;
+  const done = () => openMenu('pause', i);
+  if (document.fullscreenElement) document.exitFullscreen().then(done, done);
+  else document.documentElement.requestFullscreen().then(done, done);
+}
+
 function resume() {
   G.menu = null;
   G.mode = 'play';
@@ -482,6 +491,7 @@ function drawTextLayer(cam) {
     if (G.menu.kind === 'title') {
       wavy('TIKI TIDE', dh * 0.16, Math.round(30 * U), ['#ffd23f', '#ff9f1c', '#ff6b6b', '#5ee7ff'], 3);
       outlined('The Curse of the Soggy Biscuit', dw / 2, dh * 0.36, '#fff3b0', Math.round(7 * U));
+      if (TOUCH && !document.documentElement.requestFullscreen && !navigator.standalone) outlined('For full screen: Share, then Add to Home Screen', dw / 2, dh * 0.93, '#86ff6a', Math.round(4 * U));
       outlined(TOUCH ? 'Tap to choose' : '↑↓ choose    Enter select', dw / 2, dh * 0.86, '#d7c6ff', Math.round(4.6 * U));
     }
     drawMenu();
