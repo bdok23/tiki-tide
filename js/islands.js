@@ -194,7 +194,7 @@ AREAS.sea = (() => {
     overlay(cam) {
       for (const s of ISLES) outlined(s.name, (s.x - cam) * U, (s.y - s.r * 0.6 - 18) * U, '#fff3b0', Math.round(5 * U));
       outlined('Here be dragons', (1440 - cam) * U, 120 * U, '#bfe9ff', Math.round(4 * U));
-      if (G.hintT > 0) outlined('← → steer    ↑ sails    ↓ slow down    Enter: drop anchor', display.width / 2, (H - 14) * U, '#d7f0ff', Math.round(4.4 * U));
+      if (G.hintT > 0) outlined(`← → steer    ↑ sails    ↓ slow down    ${ACT}: drop anchor`, display.width / 2, (H - 14) * U, '#d7f0ff', Math.round(4.4 * U));
     },
   };
 })();

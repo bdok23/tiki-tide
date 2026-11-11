@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
 <title>Tiki Tide</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,16 +12,27 @@
 html, body { margin: 0; height: 100%; background: #120a1f; overflow: hidden; }
 body { display: grid; place-items: center; }
 canvas { display: block; image-rendering: pixelated; }
+html, body { touch-action: none; overscroll-behavior: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+#pad { --s: 0.75; }
+#pad button { position: fixed; width: calc(58px * var(--s)); height: calc(58px * var(--s)); border-radius: 50%; border: 2px solid rgba(255, 230, 128, 0.7); background: rgba(20, 10, 40, 0.45); color: #ffe680; font: calc(20px * var(--s)) monospace; padding: 0; -webkit-tap-highlight-color: transparent; }
+#pad button.on { background: rgba(255, 230, 128, 0.45); }
+#pad .l { left: max(12px, env(safe-area-inset-left)); bottom: calc(10px + 60px * var(--s)); }
+#pad .r { left: calc(max(12px, env(safe-area-inset-left)) + 120px * var(--s)); bottom: calc(10px + 60px * var(--s)); }
+#pad .u { left: calc(max(12px, env(safe-area-inset-left)) + 60px * var(--s)); bottom: calc(10px + 120px * var(--s)); }
+#pad .d { left: calc(max(12px, env(safe-area-inset-left)) + 60px * var(--s)); bottom: 10px; }
+#pad .a { right: max(16px, env(safe-area-inset-right)); bottom: calc(10px + 44px * var(--s)); width: calc(78px * var(--s)); height: calc(78px * var(--s)); font-size: calc(28px * var(--s)); }
+#pad .look { right: calc(max(16px, env(safe-area-inset-right)) + 92px * var(--s)); bottom: 12px; font-size: calc(11px * var(--s)); }
 </style>
 </head>
 <body>
 <canvas id="screen"></canvas>
-<script src="js/core.js?v=11"></script>
-<script src="js/audio.js?v=11"></script>
-<script src="js/art.js?v=11"></script>
-<script src="js/ui.js?v=11"></script>
-<script src="js/areas.js?v=11"></script>
-<script src="js/islands.js?v=11"></script>
-<script src="js/main.js?v=11"></script>
+<script src="js/core.js?v=13"></script>
+<script src="js/audio.js?v=13"></script>
+<script src="js/art.js?v=13"></script>
+<script src="js/ui.js?v=13"></script>
+<script src="js/areas.js?v=13"></script>
+<script src="js/islands.js?v=13"></script>
+<script src="js/main.js?v=13"></script>
+<script src="js/touch.js?v=13"></script>
 </body>
 </html>

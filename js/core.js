@@ -4,6 +4,30 @@ const DT = 1 / 60;
 const FONT = '"Press Start 2P", monospace';
 const OUT = '#1a1024';
 const COIN_TOTAL = 18;
+const TOUCH = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+const ACT = TOUCH ? 'A' : 'Enter';
+const PAD_SIZES = [['Small', 0.6], ['Medium', 0.75], ['Large', 1]];
+function padSize() {
+  try {
+    return clampPad(Number(localStorage.getItem('tikitide.pad') ?? 1));
+  } catch {
+    return 1;
+  }
+}
+function clampPad(n) {
+  return n >= 0 && n < PAD_SIZES.length ? n : 1;
+}
+function applyPadSize(n) {
+  if (n !== undefined) {
+    try {
+      localStorage.setItem('tikitide.pad', String(n));
+    } catch {
+      return;
+    }
+  }
+  const pad = document.getElementById('pad');
+  if (pad) pad.style.setProperty('--s', PAD_SIZES[padSize()][1]);
+}
 
 const mk = (w, h) => {
   const c = document.createElement('canvas');

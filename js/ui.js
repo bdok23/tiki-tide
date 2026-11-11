@@ -37,6 +37,16 @@ display.addEventListener('mousedown', e => {
   const z = zoneAt(e);
   if (z) z.fn();
 });
+display.addEventListener(
+  'touchstart',
+  e => {
+    e.preventDefault();
+    initAudio();
+    const z = zoneAt(e.changedTouches[0]);
+    if (z) z.fn();
+  },
+  { passive: false },
+);
 display.addEventListener('mousemove', e => {
   const z = zoneAt(e);
   display.style.cursor = z && !z.quiet ? 'pointer' : 'default';
@@ -110,7 +120,7 @@ function buildMenu(kind) {
         { label: 'Controls', fn: () => openMenu('controls') },
         { label: `Music: ${musicOn ? 'On' : 'Off'}`, fn: () => { musicOn = !musicOn; openMenu('pause', 7); } },
         { label: 'Quit to Title', fn: toTitle },
-      ],
+      ].concat(TOUCH ? [{ label: `Button size: ${PAD_SIZES[padSize()][0]}`, fn: () => { applyPadSize((padSize() + 1) % PAD_SIZES.length); openMenu('pause', 9); } }] : []),
     };
   }
   if (kind === 'warp') {
@@ -472,7 +482,7 @@ function drawTextLayer(cam) {
     if (G.menu.kind === 'title') {
       wavy('TIKI TIDE', dh * 0.16, Math.round(30 * U), ['#ffd23f', '#ff9f1c', '#ff6b6b', '#5ee7ff'], 3);
       outlined('The Curse of the Soggy Biscuit', dw / 2, dh * 0.36, '#fff3b0', Math.round(7 * U));
-      outlined('↑↓ choose    Enter select', dw / 2, dh * 0.86, '#d7c6ff', Math.round(4.6 * U));
+      outlined(TOUCH ? 'Tap to choose' : '↑↓ choose    Enter select', dw / 2, dh * 0.86, '#d7c6ff', Math.round(4.6 * U));
     }
     drawMenu();
     return;
@@ -515,15 +525,15 @@ function drawTextLayer(cam) {
     else if (!line && !(area.locked && area.locked())) {
       const t = nearest();
       if (t) {
-        outlined(`Enter: ${labelFor(t)}`, dw / 2, (H - 26) * U, '#ffd98a', Math.round(6 * U));
+        outlined(`${ACT}: ${labelFor(t)}`, dw / 2, (H - 26) * U, '#ffd98a', Math.round(6 * U));
         const verbs = [];
         if (t.talk) verbs.push('E talk');
         if (t.pick) verbs.push('P pick up');
         if (t.use) verbs.push('U use');
         verbs.push('L look');
-        outlined(verbs.join('   '), dw / 2, (H - 14) * U, '#b8a8d8', Math.round(4.2 * U));
+        if (!TOUCH) outlined(verbs.join('   '), dw / 2, (H - 14) * U, '#b8a8d8', Math.round(4.2 * U));
       } else if (G.hintT > 0 && !area.topdown) {
-        outlined('I inventory    Esc menu    F5 quicksave', dw / 2, (H - 14) * U, '#b8a8d8', Math.round(4.2 * U));
+        outlined(TOUCH ? 'Tap the bag or menu buttons up top' : 'I inventory    Esc menu    F5 quicksave', dw / 2, (H - 14) * U, '#b8a8d8', Math.round(4.2 * U));
       }
     }
   }
