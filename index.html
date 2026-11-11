@@ -37,13 +37,23 @@ body.paused .tbtn, body.paused .stickbase, body.paused .stickzone { display: non
 </head>
 <body>
 <canvas id="screen"></canvas>
-<script src="js/core.js?v=17"></script>
-<script src="js/audio.js?v=17"></script>
-<script src="js/art.js?v=17"></script>
-<script src="js/ui.js?v=17"></script>
-<script src="js/areas.js?v=17"></script>
-<script src="js/islands.js?v=17"></script>
-<script src="js/main.js?v=17"></script>
-<script src="js/touch.js?v=17"></script>
+<script>
+const BUILD = '18';
+fetch(`version.txt?${Date.now()}`, { cache: 'no-store' })
+  .then(r => r.text())
+  .then(v => {
+    const latest = v.trim();
+    if (latest && latest !== BUILD && !location.search.includes(`v=${latest}`)) location.replace(`${location.pathname}?v=${latest}`);
+  })
+  .catch(() => {});
+</script>
+<script src="js/core.js?v=18"></script>
+<script src="js/audio.js?v=18"></script>
+<script src="js/art.js?v=18"></script>
+<script src="js/ui.js?v=18"></script>
+<script src="js/areas.js?v=18"></script>
+<script src="js/islands.js?v=18"></script>
+<script src="js/main.js?v=18"></script>
+<script src="js/touch.js?v=18"></script>
 </body>
 </html>

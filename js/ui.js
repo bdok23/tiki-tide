@@ -99,6 +99,8 @@ function skipLine() {
   else nextLine();
 }
 
+const BACK_ITEM = { label: '< Back', fn: () => openMenu(G.menuRoot) };
+
 function buildMenu(kind) {
   if (kind === 'title') {
     const items = [{ label: 'New Game', fn: newGame }];
@@ -135,7 +137,7 @@ function buildMenu(kind) {
           resume();
           travel(id, AREAS[id].checkpoint);
         },
-      })),
+      })).concat([BACK_ITEM]),
     };
   }
   if (kind === 'save') {
@@ -149,13 +151,13 @@ function buildMenu(kind) {
           toast(ok ? `Saved to ${SLOT_NAMES[s]}` : 'Could not save');
           if (ok) sfx.select();
         },
-      })),
+      })).concat([BACK_ITEM]),
     };
   }
   if (kind === 'load') {
     return {
       kind, title: 'LOAD GAME', i: 0,
-      items: SLOTS.map(s => ({ label: slotLabel(s), disabled: !readSlot(s), fn: () => loadSlot(s) })),
+      items: SLOTS.map(s => ({ label: slotLabel(s), disabled: !readSlot(s), fn: () => loadSlot(s) })).concat([BACK_ITEM]),
     };
   }
   return {
@@ -512,6 +514,7 @@ function drawTextLayer(cam) {
       wavy('TIKI TIDE', dh * 0.16, Math.round(30 * U), ['#ffd23f', '#ff9f1c', '#ff6b6b', '#5ee7ff'], 3);
       outlined('The Curse of the Soggy Biscuit', dw / 2, dh * 0.36, '#fff3b0', Math.round(7 * U));
       if (TOUCH && !document.documentElement.requestFullscreen && !navigator.standalone) outlined('For full screen: Share, then Add to Home Screen', dw / 2, dh * 0.93, '#86ff6a', Math.round(4 * U));
+      outlined(`v${BUILD}`, dw - 6 * U, dh - 10 * U, '#6a5a8a', Math.round(3.6 * U), 'right');
       outlined(TOUCH ? 'Tap to choose' : '↑↓ choose    Enter select', dw / 2, dh * 0.86, '#d7c6ff', Math.round(4.6 * U));
     }
     drawMenu();
