@@ -29,6 +29,7 @@ body.touch .tbtn { display: flex; align-items: center; justify-content: center; 
 .tbtn.jump { right: calc(env(safe-area-inset-right) + 20px + 84px * var(--s)); bottom: 14px; width: calc(58px * var(--s)); height: calc(58px * var(--s)); }
 .tbtn.look { right: calc(env(safe-area-inset-right) + 26px); bottom: calc(34px + 78px * var(--s)); width: calc(46px * var(--s)); height: calc(46px * var(--s)); font-size: calc(10px * var(--s)) !important; }
 body.sea .tbtn.jump, body.sea .tbtn.look { display: none; }
+body.paused .tbtn, body.paused .stickbase, body.paused .stickzone { display: none; }
 @media (orientation: portrait) {
   body.touch .rotate { display: flex; position: fixed; inset: 0; z-index: 9; align-items: center; justify-content: center; text-align: center; padding: 24px; background: #120a1f; color: #ffe680; font: 18px monospace; }
 }
@@ -36,13 +37,13 @@ body.sea .tbtn.jump, body.sea .tbtn.look { display: none; }
 </head>
 <body>
 <canvas id="screen"></canvas>
-<script src="js/core.js?v=16"></script>
-<script src="js/audio.js?v=16"></script>
-<script src="js/art.js?v=16"></script>
-<script src="js/ui.js?v=16"></script>
-<script src="js/areas.js?v=16"></script>
-<script src="js/islands.js?v=16"></script>
-<script src="js/main.js?v=16"></script>
-<script src="js/touch.js?v=16"></script>
+<script src="js/core.js?v=17"></script>
+<script src="js/audio.js?v=17"></script>
+<script src="js/art.js?v=17"></script>
+<script src="js/ui.js?v=17"></script>
+<script src="js/areas.js?v=17"></script>
+<script src="js/islands.js?v=17"></script>
+<script src="js/main.js?v=17"></script>
+<script src="js/touch.js?v=17"></script>
 </body>
 </html>

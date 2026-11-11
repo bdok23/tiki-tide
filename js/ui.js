@@ -383,6 +383,15 @@ function panel(x, y, w, h) {
   dctx.strokeRect(x + 3 * U, y + 3 * U, w - 6 * U, h - 6 * U);
 }
 
+function outsideZones(x, y, w, h, fn) {
+  const dw = display.width;
+  const dh = display.height;
+  zone(0, 0, x, dh, fn);
+  zone(x + w, 0, dw - x - w, dh, fn);
+  zone(0, 0, dw, y, fn);
+  zone(0, y + h, dw, dh - y - h, fn);
+}
+
 function drawMenu() {
   const m = G.menu;
   const title = G.mode === 'title' && m.kind === 'title';
@@ -418,7 +427,14 @@ function drawMenu() {
       menuActivate();
     });
   });
-  if (!title) outlined('↑↓ choose   Enter select   Esc back', dw / 2, dh * 0.83, '#b8a8d8', Math.round(4.4 * U));
+  if (!title) {
+    outlined(TOUCH ? 'Tap outside the box to go back' : '↑↓ choose   Enter select   Esc or click outside: back', dw / 2, dh * 0.83, '#b8a8d8', Math.round(4.4 * U));
+    outsideZones(dw * 0.12, dh * 0.1, dw * 0.76, dh * 0.8, () => {
+      sfx.menu();
+      if (m.kind === 'pause') resume();
+      else openMenu(G.menuRoot);
+    });
+  }
 }
 
 function drawInventory() {
@@ -479,7 +495,11 @@ function drawInventory() {
       outlined(got ? `★ ${EGGS[k]}` : '☆ ? ? ?', x0, y0 + (i + 1) * size * 1.75, got ? '#ffe680' : '#5a5070', Math.round(4.8 * U), 'left');
     });
   }
-  outlined('←→ tabs   ↑↓ select   click here, I or Esc to close', dw / 2, dh * 0.87, '#b8a8d8', Math.round(4.2 * U));
+  outlined(TOUCH ? 'Tap a tab to switch    Tap outside the box to close' : '←→ tabs   ↑↓ select   I, Esc or click outside: close', dw / 2, dh * 0.87, '#b8a8d8', Math.round(4.2 * U));
+  outsideZones(dw * 0.06, dh * 0.07, dw * 0.88, dh * 0.86, () => {
+    sfx.menu();
+    G.mode = 'play';
+  });
 }
 
 function drawTextLayer(cam) {

@@ -117,6 +117,11 @@ const stick = { x: 0, y: 0, on: false };
     const down = e => {
       e.preventDefault();
       initAudio();
+      if (G.mode !== 'play') {
+        const z = zoneAt(e.changedTouches[0]);
+        if (z) z.fn();
+        return;
+      }
       if (!keys[key]) pressed[key] = true;
       keys[key] = true;
       b.classList.add('on');
@@ -134,6 +139,9 @@ const stick = { x: 0, y: 0, on: false };
   button('JUMP', 'ArrowUp', 'jump');
   button('LOOK', 'l', 'look');
 
-  setInterval(() => document.body.classList.toggle('sea', !!(area && area.topdown)), 250);
+  setInterval(() => {
+    document.body.classList.toggle('sea', !!(area && area.topdown));
+    document.body.classList.toggle('paused', G.mode !== 'play');
+  }, 150);
   document.addEventListener('touchmove', e => e.preventDefault(), { passive: false });
 })();
