@@ -1,5 +1,10 @@
-const W = 480;
 const H = 270;
+const W = (() => {
+  const touch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  if (!touch) return 480;
+  const a = Math.max(screen.width, screen.height) / Math.min(screen.width, screen.height);
+  return Math.max(480, Math.min(620, Math.round((H * a) / 2) * 2));
+})();
 const DT = 1 / 60;
 const FONT = '"Press Start 2P", monospace';
 const OUT = '#1a1024';
@@ -44,8 +49,16 @@ let U = 3;
 
 function resize() {
   const dpr = window.devicePixelRatio || 1;
-  const r = display.getBoundingClientRect();
-  U = ((r.width || window.innerWidth) / W) * dpr;
+  const vw = window.innerWidth;
+  const vh = window.innerHeight;
+  const s = Math.min(vw / W, vh / H);
+  const w = Math.floor(W * s);
+  const h = Math.floor(H * s);
+  display.style.width = `${w}px`;
+  display.style.height = `${h}px`;
+  display.style.left = `${Math.round((vw - w) / 2)}px`;
+  display.style.top = `${Math.round((vh - h) / 2)}px`;
+  U = s * dpr;
   display.width = Math.floor(W * U);
   display.height = Math.floor(H * U);
 }

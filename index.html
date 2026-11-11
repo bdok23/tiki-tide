@@ -14,14 +14,13 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
-html, body { margin: 0; height: 100vh; height: 100svh; background: #120a1f; overflow: hidden; }
-body { display: grid; place-items: center; }
-canvas { display: block; image-rendering: pixelated; width: min(100vw, calc(100vh * 16 / 9)); height: min(100vh, calc(100vw * 9 / 16)); width: min(100vw, calc(100svh * 16 / 9)); height: min(100svh, calc(100vw * 9 / 16)); }
+html, body { margin: 0; height: 100%; background: #120a1f; overflow: hidden; }
+canvas { display: block; position: fixed; image-rendering: pixelated; }
 html, body { touch-action: none; overscroll-behavior: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
 body.touch { --s: 1; }
 .stickzone, .stickbase, .tbtn, .rotate { display: none; }
 body.touch .stickzone { display: block; position: fixed; left: 0; bottom: 0; width: 45vw; height: 72vh; height: 72svh; }
-body.touch .stickbase { display: block; position: fixed; pointer-events: none; width: calc(82px * var(--s)); height: calc(82px * var(--s)); left: calc(env(safe-area-inset-left) + 26px); bottom: 20px; border-radius: 50%; border: 2px solid rgba(255, 230, 128, 0.45); background: rgba(20, 10, 40, 0.3); opacity: 0.6; }
+body.touch .stickbase { display: block; position: fixed; pointer-events: none; width: calc(82px * var(--s)); height: calc(82px * var(--s)); left: calc(env(safe-area-inset-left) + 26px); bottom: 20px; border-radius: 50%; border: 2px solid rgba(255, 230, 128, 0.45); background: rgba(20, 10, 40, 0.3); opacity: 0.35; }
 body.touch .stickbase.on { opacity: 1; }
 .stickknob { position: absolute; left: 27%; top: 27%; width: 46%; height: 46%; border-radius: 50%; background: rgba(255, 230, 128, 0.6); }
 body.touch .tbtn { display: flex; align-items: center; justify-content: center; position: fixed; border-radius: 50%; border: 2px solid rgba(255, 230, 128, 0.6); background: rgba(20, 10, 40, 0.4); color: #ffe680; font: bold calc(12px * var(--s)) monospace; }
@@ -37,13 +36,13 @@ body.sea .tbtn.jump, body.sea .tbtn.look { display: none; }
 </head>
 <body>
 <canvas id="screen"></canvas>
-<script src="js/core.js?v=15"></script>
-<script src="js/audio.js?v=15"></script>
-<script src="js/art.js?v=15"></script>
-<script src="js/ui.js?v=15"></script>
-<script src="js/areas.js?v=15"></script>
-<script src="js/islands.js?v=15"></script>
-<script src="js/main.js?v=15"></script>
-<script src="js/touch.js?v=15"></script>
+<script src="js/core.js?v=16"></script>
+<script src="js/audio.js?v=16"></script>
+<script src="js/art.js?v=16"></script>
+<script src="js/ui.js?v=16"></script>
+<script src="js/areas.js?v=16"></script>
+<script src="js/islands.js?v=16"></script>
+<script src="js/main.js?v=16"></script>
+<script src="js/touch.js?v=16"></script>
 </body>
 </html>
