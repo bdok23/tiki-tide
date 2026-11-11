@@ -25,9 +25,9 @@ body.touch .stickbase.on { opacity: 1; }
 .stickknob { position: absolute; left: 27%; top: 27%; width: 46%; height: 46%; border-radius: 50%; background: rgba(255, 230, 128, 0.6); }
 body.touch .tbtn { display: flex; align-items: center; justify-content: center; position: fixed; border-radius: 50%; border: 2px solid rgba(255, 230, 128, 0.6); background: rgba(20, 10, 40, 0.4); color: #ffe680; font: bold calc(12px * var(--s)) monospace; }
 .tbtn.on { background: rgba(255, 230, 128, 0.45) !important; }
-.tbtn.a { right: calc(env(safe-area-inset-right) + 20px); bottom: 26px; width: calc(74px * var(--s)); height: calc(74px * var(--s)); font-size: calc(26px * var(--s)) !important; }
-.tbtn.jump { right: calc(env(safe-area-inset-right) + 20px + 84px * var(--s)); bottom: 14px; width: calc(58px * var(--s)); height: calc(58px * var(--s)); }
-.tbtn.look { right: calc(env(safe-area-inset-right) + 26px); bottom: calc(34px + 78px * var(--s)); width: calc(46px * var(--s)); height: calc(46px * var(--s)); font-size: calc(10px * var(--s)) !important; }
+.tbtn.a { right: calc(env(safe-area-inset-right) + 20px); bottom: 26px; width: calc(80px * var(--s)); height: calc(80px * var(--s)); font-size: calc(26px * var(--s)) !important; }
+.tbtn.jump { right: calc(env(safe-area-inset-right) + 20px + 92px * var(--s)); bottom: 14px; width: calc(68px * var(--s)); height: calc(68px * var(--s)); }
+.tbtn.look { right: calc(env(safe-area-inset-right) + 26px); bottom: calc(36px + 84px * var(--s)); width: calc(58px * var(--s)); height: calc(58px * var(--s)); font-size: calc(11px * var(--s)) !important; }
 body.sea .tbtn.jump, body.sea .tbtn.look { display: none; }
 body.paused .tbtn, body.paused .stickbase, body.paused .stickzone { display: none; }
 @media (orientation: portrait) {
@@ -38,7 +38,7 @@ body.paused .tbtn, body.paused .stickbase, body.paused .stickzone { display: non
 <body>
 <canvas id="screen"></canvas>
 <script>
-const BUILD = '18';
+const BUILD = '19';
 fetch(`version.txt?${Date.now()}`, { cache: 'no-store' })
   .then(r => r.text())
   .then(v => {
@@ -47,13 +47,13 @@ fetch(`version.txt?${Date.now()}`, { cache: 'no-store' })
   })
   .catch(() => {});
 </script>
-<script src="js/core.js?v=18"></script>
-<script src="js/audio.js?v=18"></script>
-<script src="js/art.js?v=18"></script>
-<script src="js/ui.js?v=18"></script>
-<script src="js/areas.js?v=18"></script>
-<script src="js/islands.js?v=18"></script>
-<script src="js/main.js?v=18"></script>
-<script src="js/touch.js?v=18"></script>
+<script src="js/core.js?v=19"></script>
+<script src="js/audio.js?v=19"></script>
+<script src="js/art.js?v=19"></script>
+<script src="js/ui.js?v=19"></script>
+<script src="js/areas.js?v=19"></script>
+<script src="js/islands.js?v=19"></script>
+<script src="js/main.js?v=19"></script>
+<script src="js/touch.js?v=19"></script>
 </body>
 </html>

@@ -537,7 +537,7 @@ function drawTextLayer(cam) {
   }
   if (area.overlay && G.mode === 'play') area.overlay(cam);
   drawSpeech(cam);
-  outlined(`${wallet()}`, 20 * U, 7 * U, '#ffe680', Math.round(6 * U), 'left');
+  outlined(`${wallet()}`, (HUD_X + 15) * U, (HUD_Y + 2) * U, '#ffe680', Math.round(6 * U), 'left');
   if (G.cardT > 0) {
     dctx.globalAlpha = clamp(G.cardT, 0, 1);
     outlined(area.name, dw / 2, dh * 0.2, '#fff3b0', Math.round(11 * U));
@@ -582,37 +582,50 @@ function drawTextLayer(cam) {
   }
 }
 
+const HUD_X = TOUCH ? 22 : 5;
+const HUD_Y = TOUCH ? 9 : 5;
+const HUD_K = TOUCH ? 1.7 : 1;
+
 function drawHud() {
   if (G.mode === 'title' || G.mode === 'end') return;
-  icon('coin', 5, 5);
-  let x = 5;
+  icon('coin', HUD_X, HUD_Y);
+  let x = HUD_X;
   for (const id of S.inv) {
     ctx.globalAlpha = 0.5;
-    rect(x, 20, 14, 14, '#000');
+    rect(x, HUD_Y + 15, 14, 14, '#000');
     ctx.globalAlpha = 1;
-    icon(id, x + 1, 21);
+    icon(id, x + 1, HUD_Y + 16);
     x += 16;
   }
-  for (const [bx, kind] of [[W - 23, 'menu'], [W - 44, 'bag']]) {
-    rect(bx, 5, 18, 15, OUT);
-    rect(bx + 1, 6, 16, 13, '#3a2a5a');
-    rect(bx + 1, 6, 16, 1, '#6a5a9a');
-    if (kind === 'menu') for (const y of [9, 12, 15]) rect(bx + 4, y, 10, 2, '#ffe680');
+  const bw = 18 * HUD_K;
+  const bh = 15 * HUD_K;
+  const menuX = W - HUD_X - bw;
+  const bagX = menuX - bw - 8;
+  for (const [bx, kind] of [[menuX, 'menu'], [bagX, 'bag']]) {
+    ctx.save();
+    ctx.translate(Math.round(bx), HUD_Y);
+    ctx.scale(HUD_K, HUD_K);
+    rect(0, 0, 18, 15, OUT);
+    rect(1, 1, 16, 13, '#3a2a5a');
+    rect(1, 1, 16, 1, '#6a5a9a');
+    if (kind === 'menu') for (const y of [4, 7, 10]) rect(4, y, 10, 2, '#ffe680');
     else {
-      rect(bx + 6, 8, 6, 2, '#c8a46a');
-      rect(bx + 4, 10, 10, 7, '#a0703a');
-      rect(bx + 4, 10, 10, 1, '#c8a46a');
-      rect(bx + 8, 12, 2, 2, '#ffe680');
+      rect(6, 3, 6, 2, '#c8a46a');
+      rect(4, 5, 10, 7, '#a0703a');
+      rect(4, 5, 10, 1, '#c8a46a');
+      rect(8, 7, 2, 2, '#ffe680');
     }
+    ctx.restore();
   }
   if (G.mode === 'play' && !G.fadeDir) {
-    zone((W - 23) * U, 5 * U, 18 * U, 15 * U, openPause);
+    const pad = TOUCH ? 8 : 0;
+    zone((menuX - 4) * U, 0, (bw + 4 + HUD_X) * U, (HUD_Y + bh + pad) * U, openPause);
     const bag = () => {
       if (choice) return;
       sfx.menu();
       openInventory();
     };
-    zone((W - 44) * U, 5 * U, 18 * U, 15 * U, bag);
-    zone(5 * U, 5 * U, Math.max(30, S.inv.length * 16) * U, 30 * U, bag);
+    zone((bagX - pad) * U, 0, (bw + pad + 4) * U, (HUD_Y + bh + pad) * U, bag);
+    zone(0, 0, (HUD_X + Math.max(34, S.inv.length * 16) + pad) * U, (HUD_Y + 30 + pad) * U, bag);
   }
 }
