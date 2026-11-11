@@ -431,7 +431,7 @@ function drawMenu() {
     });
   });
   if (!title) {
-    outlined(TOUCH ? 'Tap outside the box to go back' : '↑↓ choose   Enter select   Esc or click outside: back', dw / 2, dh * 0.83, '#b8a8d8', Math.round(4.4 * U));
+    if (!TOUCH) outlined('↑↓ choose   Enter select   Esc: back', dw / 2, dh * 0.83, '#b8a8d8', Math.round(4.4 * U));
     outsideZones(dw * 0.12, dh * 0.1, dw * 0.76, dh * 0.8, () => {
       sfx.menu();
       if (m.kind === 'pause') resume();
@@ -498,7 +498,7 @@ function drawInventory() {
       outlined(got ? `★ ${EGGS[k]}` : '☆ ? ? ?', x0, y0 + (i + 1) * size * 1.75, got ? '#ffe680' : '#5a5070', Math.round(4.8 * U), 'left');
     });
   }
-  outlined(TOUCH ? 'Tap a tab to switch    Tap outside the box to close' : '←→ tabs   ↑↓ select   I, Esc or click outside: close', dw / 2, dh * 0.87, '#b8a8d8', Math.round(4.2 * U));
+  if (!TOUCH) outlined('←→ tabs   ↑↓ select   I or Esc: close', dw / 2, dh * 0.87, '#b8a8d8', Math.round(4.2 * U));
   outsideZones(dw * 0.06, dh * 0.07, dw * 0.88, dh * 0.86, () => {
     sfx.menu();
     G.mode = 'play';
@@ -516,7 +516,7 @@ function drawTextLayer(cam) {
       outlined('The Curse of the Soggy Biscuit', dw / 2, dh * 0.36, '#fff3b0', Math.round(7 * U));
       if (TOUCH && !document.documentElement.requestFullscreen && !navigator.standalone) outlined('For full screen: Share, then Add to Home Screen', dw / 2, dh * 0.93, '#86ff6a', Math.round(4 * U));
       outlined(`v${BUILD}`, dw - 6 * U, dh - 10 * U, '#6a5a8a', Math.round(3.6 * U), 'right');
-      outlined(TOUCH ? 'Tap to choose' : '↑↓ choose    Enter select', dw / 2, dh * 0.86, '#d7c6ff', Math.round(4.6 * U));
+      if (!TOUCH) outlined('↑↓ choose    Enter select', dw / 2, dh * 0.86, '#d7c6ff', Math.round(4.6 * U));
     }
     drawMenu();
     return;
@@ -566,8 +566,8 @@ function drawTextLayer(cam) {
         if (t.use) verbs.push('U use');
         verbs.push('L look');
         if (!TOUCH) outlined(verbs.join('   '), dw / 2, (H - 14) * U, '#b8a8d8', Math.round(4.2 * U));
-      } else if (G.hintT > 0 && !area.topdown) {
-        outlined(TOUCH ? 'Tap the bag or menu buttons up top' : 'I inventory    Esc menu    F5 quicksave', dw / 2, (H - 14) * U, '#b8a8d8', Math.round(4.2 * U));
+      } else if (G.hintT > 0 && !area.topdown && !TOUCH) {
+        outlined('I inventory    Esc menu    F5 quicksave', dw / 2, (H - 14) * U, '#b8a8d8', Math.round(4.2 * U));
       }
     }
   }
